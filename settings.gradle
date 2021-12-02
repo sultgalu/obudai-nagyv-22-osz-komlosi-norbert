@@ -1,1 +1,6 @@
 rootProject.name = 'warehouse'
+
+include(":warehouse-app")
+include(":warehouse-domain")
+include(":warehouse-service")
+include(":warehouse-persistence")
