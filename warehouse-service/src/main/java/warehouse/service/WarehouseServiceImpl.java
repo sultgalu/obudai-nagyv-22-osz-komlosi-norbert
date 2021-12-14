@@ -67,29 +67,49 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public void rentStorageRoom(Long storageRoomId) {
-    getStorageRoom(storageRoomId).owner = this.loggedIn;
-    getStorageRoom(storageRoomId).isFree = false;
-    this.loggedIn.storageRooms.add(getStorageRoom(storageRoomId));
+    StorageRoom sr = getStorageRoom(storageRoomId);
+    if (sr.owner != this.loggedIn) {
+      sr.owner = this.loggedIn;
+      sr.isFree = false;
+      this.loggedIn.storageRooms.add(getStorageRoom(storageRoomId));
+    } else {
+      // throw;
+    }
   }
 
   @Override
   public void cancelStorageRoomRending(Long storageRoomId) {
-    getStorageRoom(storageRoomId).owner = null;
-    getStorageRoom(storageRoomId).isFree = true;
-    this.loggedIn.storageRooms.removeIf(x -> x.id == storageRoomId);
+    StorageRoom sr = getStorageRoom(storageRoomId);
+    if (sr.owner == this.loggedIn) {
+      sr.owner = null;
+      sr.isFree = true;
+      this.loggedIn.storageRooms.removeIf(x -> x.id == storageRoomId);
+    } else {
+      // throw;
+    }
   }
 
   @Override
   public void storeBox(Box box, Long storageRoomId) {
-    getStorageRoom(storageRoomId).boxes.add(box);
+    StorageRoom sr = getStorageRoom(storageRoomId);
+    if (sr.owner == this.loggedIn) {
+      sr.boxes.add(box);
+    } else {
+      // throw;
+    }
   }
 
   @Override
   public void removeBox(Long boxId) {
-    this.warehouse.boxes.removeIf(b -> b.id == boxId);
-    this.warehouse.storageRooms.forEach(sr -> {
-      sr.boxes.removeIf(b -> b.id == boxId);
-    });
+    Box box = this.warehouse.boxes.stream().filter(sr -> sr.id == boxId).findFirst().get();
+    if (box.owner == this.loggedIn) {
+      this.warehouse.boxes.removeIf(b -> b.id == boxId);
+      this.warehouse.storageRooms.forEach(sr -> {
+        sr.boxes.removeIf(b -> b.id == boxId);
+      });
+    } else {
+      // throw;
+    }
   }
 
 }

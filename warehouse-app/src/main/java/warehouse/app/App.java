@@ -20,8 +20,8 @@ public class App {
 
     this.view.printWelcomeMessage();
 
-    String uname = "Márk"; // this.view.readUsername();
-    String pwd = "asd"; // this.view.readPassword();
+    String uname = "nemenek"; // this.view.readUsername();
+    String pwd = "1234"; // this.view.readPassword();
     this.service.authenticate(uname, pwd);
     if (this.service.isLoggedIn()) {
       this.view.printLoggedIn(uname);

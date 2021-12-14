@@ -190,6 +190,7 @@ public class ConsoleView implements View {
     String mats = transformToList(box.materials.stream().map(Material::name).toArray());
     String cats = transformToList(box.categories.stream().map(Category::name).toArray());
     System.out.println("----------------------------");
+    System.out.println("\tId: " + box.id);
     System.out.println("\tSize: " + box.size.x + "x" + box.size.y);
     System.out.println("\tMaterials: " + mats);
     System.out.println("\tCategories: " + cats);
