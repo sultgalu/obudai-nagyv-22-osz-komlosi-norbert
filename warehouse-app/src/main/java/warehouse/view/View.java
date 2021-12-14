@@ -1,9 +1,12 @@
 package warehouse.view;
 
+import org.springframework.stereotype.Component;
+
 import warehouse.domain.Box;
 import warehouse.domain.Customer;
 import warehouse.domain.Warehouse;
 
+@Component
 public interface View {
   void printWelcomeMessage();
 

@@ -1,15 +1,18 @@
 package warehouse.view;
 
+import org.springframework.stereotype.Component;
+
 import warehouse.domain.Box;
 import warehouse.domain.Customer;
 import warehouse.domain.StorageRoom;
 import warehouse.domain.Warehouse;
 
+@Component
 public class ConsoleView implements View {
 
   @Override
   public void printWelcomeMessage() {
-    System.out.print("Hi!");
+    System.out.println("-- Welcome to the Warehouse Application! --");
   }
 
   @Override
@@ -103,8 +106,11 @@ public class ConsoleView implements View {
 
   @Override
   public Box readBox() {
-    // TODO Auto-generated method stub
-    return null;
+    Box box = new Box();
+    System.out.print("box Id: ");
+    box.id = Long.valueOf(System.console().readLine());
+
+    return box;
   }
 
   private static void printStorageRoom(StorageRoom sr) {
