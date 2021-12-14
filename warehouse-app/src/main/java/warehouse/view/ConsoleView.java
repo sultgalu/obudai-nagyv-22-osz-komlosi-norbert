@@ -205,4 +205,9 @@ public class ConsoleView implements View {
     return mats.trim().replace(" ", ", ") + "]";
   }
 
+  @Override
+  public void printErrorMessage(String msg) {
+    System.out.println("ERR:: " + msg);
+  }
+
 }

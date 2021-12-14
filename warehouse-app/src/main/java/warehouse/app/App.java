@@ -61,25 +61,30 @@ public class App {
     while (!input.equals("q")) {
       this.view.printBoxesMenu();
       input = this.view.getInput().toLowerCase();
-      switch (input) {
-        case "1":
-          Box box = this.view.readBox();
-          this.view.printReadStorageRoomIdPrompt();
-          String srId = this.view.getInput();
-          this.service.storeBox(box, Long.valueOf(srId));
-          break;
-        case "2":
-          Long boxId = this.view.selectBoxToRemove(this.service.getLoggedInCustomer());
-          this.service.removeBox(boxId);
-          break;
-        case "3":
-          this.view.printCustomerBoxes(this.service.getLoggedInCustomer());
-          break;
-        case "q":
-          return;
-        default:
-          this.view.printWrongInput();
+      try {
+        switch (input) {
+          case "1":
+            Box box = this.view.readBox();
+            this.view.printReadStorageRoomIdPrompt();
+            String srId = this.view.getInput();
+            this.service.storeBox(box, Long.valueOf(srId));
+            break;
+          case "2":
+            Long boxId = this.view.selectBoxToRemove(this.service.getLoggedInCustomer());
+            this.service.removeBox(boxId);
+            break;
+          case "3":
+            this.view.printCustomerBoxes(this.service.getLoggedInCustomer());
+            break;
+          case "q":
+            return;
+          default:
+            this.view.printWrongInput();
+        }
+      } catch (Exception e) {
+        this.view.printErrorMessage(e.getLocalizedMessage());
       }
+
     }
   }
 
@@ -88,27 +93,31 @@ public class App {
     while (!input.equals("q")) {
       this.view.printStorageRoomsMenu();
       input = this.view.getInput().toLowerCase();
-      switch (input) {
-        case "1":
-          this.view.printWarehouseStorageRooms(this.service.getWarehouse());
-          break;
-        case "2":
-          this.view.printRentStorageRoomPrompt();
-          input = this.view.getInput().toLowerCase();
-          this.service.rentStorageRoom(Long.valueOf(input));
-          break;
-        case "3":
-          this.view.printCancelStorageRoomPrompt();
-          input = this.view.getInput().toLowerCase();
-          this.service.cancelStorageRoomRending(Long.valueOf(input));
-          break;
-        case "4":
-          this.view.printStorageRoomsRentByCustomer(this.service.getLoggedInCustomer());
-          break;
-        case "q":
-          return;
-        default:
-          this.view.printWrongInput();
+      try {
+        switch (input) {
+          case "1":
+            this.view.printWarehouseStorageRooms(this.service.getWarehouse());
+            break;
+          case "2":
+            this.view.printRentStorageRoomPrompt();
+            input = this.view.getInput().toLowerCase();
+            this.service.rentStorageRoom(Long.valueOf(input));
+            break;
+          case "3":
+            this.view.printCancelStorageRoomPrompt();
+            input = this.view.getInput().toLowerCase();
+            this.service.cancelStorageRoomRending(Long.valueOf(input));
+            break;
+          case "4":
+            this.view.printStorageRoomsRentByCustomer(this.service.getLoggedInCustomer());
+            break;
+          case "q":
+            return;
+          default:
+            this.view.printWrongInput();
+        }
+      } catch (Exception e) {
+        this.view.printErrorMessage(e.getLocalizedMessage());
       }
     }
   }

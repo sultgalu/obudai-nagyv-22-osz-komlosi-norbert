@@ -51,4 +51,6 @@ public interface View {
   public void printLoggedOut(String username);
 
   public void printQuitMessage();
+
+  public void printErrorMessage(String msg);
 }
