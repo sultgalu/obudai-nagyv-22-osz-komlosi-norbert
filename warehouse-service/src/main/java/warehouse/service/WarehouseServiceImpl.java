@@ -93,7 +93,10 @@ public class WarehouseServiceImpl implements WarehouseService {
   public void storeBox(Box box, Long storageRoomId) {
     StorageRoom sr = getStorageRoom(storageRoomId);
     if (sr.owner == this.loggedIn) {
+      box.storageRoom = sr;
+      box.owner = this.loggedIn;
       sr.boxes.add(box);
+      this.warehouse.boxes.add(box);
     } else {
       // throw;
     }

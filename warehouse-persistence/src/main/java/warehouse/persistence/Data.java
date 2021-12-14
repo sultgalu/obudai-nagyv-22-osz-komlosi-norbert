@@ -1,5 +1,6 @@
 package warehouse.persistence;
 
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -126,7 +127,50 @@ public class Data {
   }
 
   public void save(Warehouse w) {
+    try (FileWriter writer = new FileWriter("warehouse.txt")) {
+      List<String> wLines = getWarehouseLines(w);
+      for (String line : wLines) {
+        writer.write(line + System.lineSeparator());
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    try (FileWriter writer = new FileWriter("boxes.txt")) {
+      List<String> bLines = getBoxesLines(w.boxes);
+      for (String line : bLines) {
+        writer.write(line + System.lineSeparator());
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
+  private static List<String> getWarehouseLines(Warehouse w) {
+    return Arrays.asList(w.storageRooms.stream().map(sr -> {
+      String line = String.format("%d %d", sr.id, sr.owner.id);
+      StringBuilder boxIds = new StringBuilder();
+      sr.boxes.stream().forEach(b -> {
+        boxIds.append(b.id + " ");
+      });
+      return line + " " + boxIds.toString().trim().replace(' ', '|');
+    }).toArray(String[]::new));
+  }
+
+  private static List<String> getBoxesLines(List<Box> boxes) {
+    return Arrays.asList(boxes.stream().map(box -> {
+      String line = String.format("%d %d %dx%d", box.id, box.owner.id, box.size.x, box.size.y);
+      StringBuilder mats = new StringBuilder(), cats = new StringBuilder();
+
+      box.materials.stream().forEach(m -> {
+        mats.append(m.name() + " ");
+      });
+      box.categories.stream().forEach(c -> {
+        cats.append(c.name() + " ");
+      });
+
+      return line + " " + mats.toString().trim().replace(' ', '|')
+        + " " + cats.toString().trim().replace(' ', '|');
+    }).toArray(String[]::new));
   }
 
   private static Size getSize(String str) {

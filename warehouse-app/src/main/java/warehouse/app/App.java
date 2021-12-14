@@ -53,6 +53,7 @@ public class App {
     }
 
     this.view.printQuitMessage();
+    this.service.saveData();
   }
 
   public void boxesMenu() {
