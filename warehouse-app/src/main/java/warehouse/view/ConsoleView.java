@@ -34,18 +34,29 @@ public class ConsoleView implements View {
 
   @Override
   public void printMainMenu() {
-    System.out.print("Főmenü!");
+    System.out.print("-- Main menu --\n"
+      + "1: Storage Rooms.\n"
+      + "2: Boxes.\n"
+      + "3: Quit.\n");
   }
 
   @Override
   public void printStorageRoomsMenu() {
-    System.out.print("Storage room!");
-
+    System.out.print("-- Storage rooms menu --\n"
+      + "1: Get information about all storage rooms.\n"
+      + "2: Rent a new storage room.\n"
+      + "3: Cancel renting.\n"
+      + "4: Get information about my storage rooms.\n"
+      + "Q: Go back!\n");
   }
 
   @Override
   public void printBoxesMenu() {
-    System.out.print("Boxes room!");
+    System.out.print("-- Boxes room menu --\n"
+      + "1: New box.\n"
+      + "2: Remove box.\n"
+      + "3: List my boxes.\n"
+      + "Q: Go back!\n");
   }
 
   @Override
@@ -64,6 +75,7 @@ public class ConsoleView implements View {
 
   @Override
   public void printCustomerBoxes(Customer customer) {
+    // System.out.println(customer.username);
     customer.storageRooms.stream().forEach(sr -> {
       sr.boxes.stream().forEach(box -> {
         printBox(box);
@@ -111,6 +123,41 @@ public class ConsoleView implements View {
     box.id = Long.valueOf(System.console().readLine());
 
     return box;
+  }
+
+  @Override
+  public void printLoggedIn(String uname) {
+    System.out.println("-- " + uname + " is logged in --");
+  }
+
+  @Override
+  public void printWrongInput() {
+    System.out.println("Wrong input!");
+  }
+
+  @Override
+  public boolean getLogoutConformation() {
+    while (true) {
+      System.out.println("Are you sure? (Y/N)");
+      String input = System.console().readLine().toLowerCase();
+      if (input.equals("y")) {
+        return true;
+      }
+      if (input.equals("n")) {
+        return false;
+      }
+      // continue
+    }
+  }
+
+  @Override
+  public void printLoggedOut(String username) {
+    System.out.println(username + " user logged out.");
+  }
+
+  @Override
+  public void printQuitMessage() {
+    System.out.println("App has terminated.");
   }
 
   private static void printStorageRoom(StorageRoom sr) {

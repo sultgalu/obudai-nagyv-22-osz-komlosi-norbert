@@ -1,85 +1,93 @@
 package warehouse.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import warehouse.domain.Box;
 import warehouse.domain.Customer;
 import warehouse.domain.StorageRoom;
 import warehouse.domain.Warehouse;
+import warehouse.persistence.Data;
 
 @Component
+@ComponentScan(basePackages = { "warehouse.persistence" })
 public class WarehouseServiceImpl implements WarehouseService {
+
+  @Autowired
+  private Data data;
+  private Warehouse warehouse;
+  private Customer loggedIn;
 
   @Override
   public void saveData() {
-    // TODO Auto-generated method stub
-
+    this.data.save(this.warehouse);
   }
 
   @Override
   public void initializeData() {
-    // TODO Auto-generated method stub
-
+    this.warehouse = this.data.load();
   }
 
   @Override
   public boolean authenticate(String username, String password) {
-    // TODO Auto-generated method stub
+    for (Customer c : this.warehouse.customers) {
+      if ((c.username.equals(username)) && (c.password.equals(password))) {
+        this.loggedIn = c;
+        return true;
+      }
+    }
     return false;
   }
 
   @Override
   public boolean isLoggedIn() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.loggedIn != null;
   }
 
   @Override
   public Customer getLoggedInCustomer() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.loggedIn;
   }
 
   @Override
   public void logout() {
-    // TODO Auto-generated method stub
-
+    this.loggedIn = null;
   }
 
   @Override
   public Warehouse getWarehouse() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.warehouse;
   }
 
   @Override
   public StorageRoom getStorageRoom(Long storageRoomId) {
-    // TODO Auto-generated method stub
-    return null;
+    return this.warehouse.storageRooms.stream().filter(sr -> sr.id == storageRoomId).findFirst().get();
   }
 
   @Override
   public void rentStorageRoom(Long storageRoomId) {
-    // TODO Auto-generated method stub
-
+    getStorageRoom(storageRoomId).owner = this.loggedIn;
+    getStorageRoom(storageRoomId).isFree = false;
   }
 
   @Override
   public void cancelStorageRoomRending(Long storageRoomId) {
-    // TODO Auto-generated method stub
-
+    getStorageRoom(storageRoomId).owner = null;
+    getStorageRoom(storageRoomId).isFree = true;
   }
 
   @Override
   public void storeBox(Box box, Long storageRoomId) {
-    // TODO Auto-generated method stub
-
+    getStorageRoom(storageRoomId).boxes.add(box);
   }
 
   @Override
   public void removeBox(Long boxId) {
-    // TODO Auto-generated method stub
-
+    this.warehouse.boxes.removeIf(b -> b.id == boxId);
+    this.warehouse.storageRooms.forEach(sr -> {
+      sr.boxes.removeIf(b -> b.id == boxId);
+    });
   }
 
 }

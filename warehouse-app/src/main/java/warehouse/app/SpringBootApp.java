@@ -7,21 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import warehouse.service.WarehouseService;
-import warehouse.view.View;
-
 @SpringBootApplication(scanBasePackages = {
-  "warehouse.service", "warehouse.view" })
+  "warehouse.service", "warehouse.view", "warehouse.app" })
 public class SpringBootApp {
-
   @Autowired
-  private View view;
-
-  @Autowired
-  private WarehouseService service;
-
-  @Autowired
-  private SpringBootApp app;
+  private App app;
 
   public static void main(String args[]) {
     SpringApplication.run(SpringBootApp.class, args);
@@ -30,7 +20,7 @@ public class SpringBootApp {
   @Bean
   public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
     return args -> {
-      this.app.view.printWelcomeMessage();
+      this.app.play();
     };
   }
 }

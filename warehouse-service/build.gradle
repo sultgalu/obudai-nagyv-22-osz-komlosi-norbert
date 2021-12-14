@@ -1,5 +1,6 @@
 dependencies {
 	implementation project(':warehouse-domain')
+	implementation project(':warehouse-persistence')
 }
 
 bootJar {

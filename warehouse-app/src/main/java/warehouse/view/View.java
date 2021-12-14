@@ -41,4 +41,14 @@ public interface View {
   void printReadStorageRoomIdPrompt();
 
   Box readBox();
+
+  void printLoggedIn(String uname);
+
+  public void printWrongInput();
+
+  public boolean getLogoutConformation();
+
+  public void printLoggedOut(String username);
+
+  public void printQuitMessage();
 }
