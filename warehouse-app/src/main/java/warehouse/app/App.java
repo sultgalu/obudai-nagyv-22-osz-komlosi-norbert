@@ -19,13 +19,13 @@ public class App {
     this.service.initializeData();
 
     this.view.printWelcomeMessage();
+    String uname;
 
-    String uname = "nemenek"; // this.view.readUsername();
-    String pwd = "1234"; // this.view.readPassword();
-    this.service.authenticate(uname, pwd);
-    if (this.service.isLoggedIn()) {
-      this.view.printLoggedIn(uname);
-    } else {
+    try {
+      uname = loginUser();
+    } catch (AuthenticationException e) {
+      this.view.printErrorMessage(e.getLocalizedMessage());
+      this.view.printQuitMessage();
       return;
     }
 
@@ -56,7 +56,22 @@ public class App {
     this.service.saveData();
   }
 
-  public void boxesMenu() {
+  private String loginUser() throws AuthenticationException {
+    for (int i = 0; i < 3; i++) {
+      String uname = this.view.readUsername();
+      String pwd = this.view.readPassword();
+      this.service.authenticate(uname, pwd);
+      if (this.service.isLoggedIn()) {
+        this.view.printLoggedIn(uname);
+        return uname;
+      } else {
+        this.view.printIncorrectCredentialsMessage();
+      }
+    }
+    throw new AuthenticationException("Reached 3 failed login attempts");
+  }
+
+  private void boxesMenu() {
     String input = "-1";
     while (!input.equals("q")) {
       this.view.printBoxesMenu();
@@ -88,7 +103,7 @@ public class App {
     }
   }
 
-  public void storageRoomsMenu() {
+  private void storageRoomsMenu() {
     String input = "-1";
     while (!input.equals("q")) {
       this.view.printStorageRoomsMenu();

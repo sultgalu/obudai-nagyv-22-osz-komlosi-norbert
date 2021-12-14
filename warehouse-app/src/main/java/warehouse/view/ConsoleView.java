@@ -210,4 +210,8 @@ public class ConsoleView implements View {
     System.out.println("ERR:: " + msg);
   }
 
+  @Override
+  public void printInfo(String msg) {
+    System.out.println(msg);
+  }
 }

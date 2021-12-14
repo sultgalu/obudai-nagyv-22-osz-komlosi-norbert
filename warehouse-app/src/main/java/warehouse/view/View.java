@@ -53,4 +53,6 @@ public interface View {
   public void printQuitMessage();
 
   public void printErrorMessage(String msg);
+
+  public void printInfo(String msg);
 }
