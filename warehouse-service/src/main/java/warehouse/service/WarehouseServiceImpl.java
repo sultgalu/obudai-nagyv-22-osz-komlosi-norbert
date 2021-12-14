@@ -69,12 +69,14 @@ public class WarehouseServiceImpl implements WarehouseService {
   public void rentStorageRoom(Long storageRoomId) {
     getStorageRoom(storageRoomId).owner = this.loggedIn;
     getStorageRoom(storageRoomId).isFree = false;
+    this.loggedIn.storageRooms.add(getStorageRoom(storageRoomId));
   }
 
   @Override
   public void cancelStorageRoomRending(Long storageRoomId) {
     getStorageRoom(storageRoomId).owner = null;
     getStorageRoom(storageRoomId).isFree = true;
+    this.loggedIn.storageRooms.removeIf(x -> x.id == storageRoomId);
   }
 
   @Override

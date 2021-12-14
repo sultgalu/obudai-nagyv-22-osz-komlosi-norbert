@@ -1,9 +1,15 @@
 package warehouse.view;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import warehouse.domain.Box;
+import warehouse.domain.Category;
 import warehouse.domain.Customer;
+import warehouse.domain.Material;
+import warehouse.domain.Size;
 import warehouse.domain.StorageRoom;
 import warehouse.domain.Warehouse;
 
@@ -75,7 +81,6 @@ public class ConsoleView implements View {
 
   @Override
   public void printCustomerBoxes(Customer customer) {
-    // System.out.println(customer.username);
     customer.storageRooms.stream().forEach(sr -> {
       sr.boxes.stream().forEach(box -> {
         printBox(box);
@@ -85,7 +90,6 @@ public class ConsoleView implements View {
 
   @Override
   public Long selectBoxToRemove(Customer customer) {
-    printCustomerBoxes(customer);
     System.out.print("Give the ID of the box you want to remove \r\n"
       + "from the storage room:");
     return Long.parseLong(getInput());
@@ -121,7 +125,19 @@ public class ConsoleView implements View {
     Box box = new Box();
     System.out.print("box Id: ");
     box.id = Long.valueOf(System.console().readLine());
+    System.out.print("Size: ");
+    String[] size = System.console().readLine().split("x");
+    box.size = new Size();
+    box.size.x = Integer.valueOf(size[0]);
+    box.size.y = Integer.valueOf(size[1]);
 
+    System.out.print("Content: ");
+    String content = System.console().readLine();
+    box.materials = Arrays.asList(Material.valueOf(content));
+
+    System.out.print("Categories: ");
+    List<String> cats = Arrays.asList(System.console().readLine().replace(" ", "").split(","));
+    box.categories = Arrays.asList(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new));
     return box;
   }
 
@@ -161,16 +177,31 @@ public class ConsoleView implements View {
   }
 
   private static void printStorageRoom(StorageRoom sr) {
-    System.out.println(sr.id);
-    // System.out.println("StorageRoom Id: " + sr.id);
-    // System.out.println("\tOwner: " + sr.owner.username);
-    // System.out.println("\tSize: " + sr.size);
-    // System.out.println("\tBoxes: " + sr.boxes.size());
-    // System.out.println(sr.isFree ? "Free" : "Not free");
+    System.out.println("----------------------------");
+    System.out.println("StorageRoom Id: " + sr.id);
+    System.out.println("\tOwner: " + (sr.owner != null ? sr.owner.username : "nobody"));
+    System.out.println("\tSize: " + sr.size.x + "x" + sr.size.y);
+    System.out.println("\tBoxes: " + sr.boxes.size());
+    System.out.println(sr.isFree ? "Free" : "Not free");
+    System.out.println("----------------------------");
   }
 
   private static void printBox(Box box) {
-    System.out.println(box.id);
+    String mats = transformToList(box.materials.stream().map(Material::name).toArray());
+    String cats = transformToList(box.categories.stream().map(Category::name).toArray());
+    System.out.println("----------------------------");
+    System.out.println("\tSize: " + box.size.x + "x" + box.size.y);
+    System.out.println("\tMaterials: " + mats);
+    System.out.println("\tCategories: " + cats);
+    System.out.println("----------------------------");
+  }
+
+  private static <T> String transformToList(T[] list) {
+    String mats = "[";
+    for (T m : list) {
+      mats += m + " ";
+    }
+    return mats.trim().replace(" ", ", ") + "]";
   }
 
 }

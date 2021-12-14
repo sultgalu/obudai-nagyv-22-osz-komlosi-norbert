@@ -3,6 +3,7 @@ package warehouse.app;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import warehouse.domain.Box;
 import warehouse.service.WarehouseService;
 import warehouse.view.View;
 
@@ -61,10 +62,14 @@ public class App {
       input = this.view.getInput().toLowerCase();
       switch (input) {
         case "1":
-          this.view.readBox();
+          Box box = this.view.readBox();
+          this.view.printReadStorageRoomIdPrompt();
+          String srId = this.view.getInput();
+          this.service.storeBox(box, Long.valueOf(srId));
           break;
         case "2":
-          this.view.selectBoxToRemove(this.service.getLoggedInCustomer());
+          Long boxId = this.view.selectBoxToRemove(this.service.getLoggedInCustomer());
+          this.service.removeBox(boxId);
           break;
         case "3":
           this.view.printCustomerBoxes(this.service.getLoggedInCustomer());
@@ -88,9 +93,13 @@ public class App {
           break;
         case "2":
           this.view.printRentStorageRoomPrompt();
+          input = this.view.getInput().toLowerCase();
+          this.service.rentStorageRoom(Long.valueOf(input));
           break;
         case "3":
           this.view.printCancelStorageRoomPrompt();
+          input = this.view.getInput().toLowerCase();
+          this.service.cancelStorageRoomRending(Long.valueOf(input));
           break;
         case "4":
           this.view.printStorageRoomsRentByCustomer(this.service.getLoggedInCustomer());
