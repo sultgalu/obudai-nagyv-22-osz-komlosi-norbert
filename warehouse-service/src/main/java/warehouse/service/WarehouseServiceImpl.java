@@ -1,6 +1,7 @@
 package warehouse.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -62,6 +63,17 @@ public class WarehouseServiceImpl implements WarehouseService {
   @Override
   public void logout() {
     this.loggedInId = 0;
+  }
+
+  @Override
+  public Iterable<Box> getMyBoxes() {
+    List<Box> result = new ArrayList<>();
+    this.boxRepo.findAll().forEach(b -> {
+      if (b.getOwner().getId() == getLoggedInCustomer().getId()) {
+        result.add(b);
+      }
+    });
+    return result;
   }
 
   @Override

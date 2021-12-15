@@ -20,6 +20,8 @@ public interface WarehouseService {
 
   void logout();
 
+  public Iterable<Box> getMyBoxes();
+
   public Iterable<StorageRoom> getStorageRooms();
 
   public Iterable<StorageRoom> getMyStorageRooms();
