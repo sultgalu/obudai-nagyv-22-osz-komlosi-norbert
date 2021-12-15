@@ -59,14 +59,14 @@ public class Data {
     String[] split = data.split(" ");
     String[] sizeS = split[1].split("x");
     Size size = new Size();
-    size.x = Integer.valueOf(sizeS[0]);
-    size.y = Integer.valueOf(sizeS[1]);
+    size.setX(Integer.valueOf(sizeS[0]));
+    size.setY(Integer.valueOf(sizeS[1]));
 
     StorageRoom result = new StorageRoom();
-    result.id = Long.valueOf(split[0]);
-    result.size = size;
-    result.boxes = new LinkedList<>();
-    result.isFree = true;
+    result.setId(Long.valueOf(split[0]));
+    result.setSize(size);
+    result.setBoxes(new LinkedList<>());
+    result.setFree(true);
 
     return result;
   }
@@ -75,10 +75,10 @@ public class Data {
     String[] split = data.split(" ");
 
     Customer result = new Customer();
-    result.id = Long.valueOf(split[0]);
-    result.username = split[1];
-    result.password = split[2];
-    result.storageRooms = new ArrayList<>();
+    result.setId(Long.valueOf(split[0]));
+    result.setUsername(split[1]);
+    result.setPassword(split[2]);
+    result.setStorageRooms(new ArrayList<>());
 
     return result;
   }
@@ -91,11 +91,11 @@ public class Data {
       .toArray(Category[]::new);
 
     Box result = new Box();
-    result.id = Long.valueOf(split[0]);
-    result.owner = customers.stream().filter(x -> x.id == Long.valueOf(split[1])).findFirst().get();
-    result.size = getSize(split[2]);
-    result.materials = Arrays.asList(mats);
-    result.categories = Arrays.asList(cats);
+    result.setId(Long.valueOf(split[0]));
+    result.setOwner(customers.stream().filter(x -> x.getId() == Long.valueOf(split[1])).findFirst().get());
+    result.setSize(getSize(split[2]));
+    result.setMaterials(Arrays.asList(mats));
+    result.setCategories(Arrays.asList(cats));
 
     return result;
   }
@@ -103,23 +103,23 @@ public class Data {
   private static Warehouse loadWarehouse(List<String> data, List<StorageRoom> storageRooms, List<Customer> customers,
     List<Box> boxes) {
     Warehouse warehouse = new Warehouse();
-    warehouse.boxes = boxes;
-    warehouse.storageRooms = storageRooms;
-    warehouse.customers = customers;
+    warehouse.setBoxes(boxes);
+    warehouse.setStorageRooms(storageRooms);
+    warehouse.setCustomers(customers);
 
     data.stream().forEach(line -> {
       String[] split = line.split(" ");
-      StorageRoom sr = storageRooms.stream().filter(x -> x.id == Long.valueOf(split[0])).findFirst().get();
-      Customer c = customers.stream().filter(x -> x.id == Long.valueOf(split[1])).findFirst().get();
+      StorageRoom sr = storageRooms.stream().filter(x -> x.getId() == Long.valueOf(split[0])).findFirst().get();
+      Customer c = customers.stream().filter(x -> x.getId() == Long.valueOf(split[1])).findFirst().get();
 
-      sr.isFree = false;
-      sr.owner = c;
-      c.storageRooms.add(sr);
+      sr.setFree(false);
+      sr.setOwner(c);
+      c.getStorageRooms().add(sr);
 
       Arrays.asList(split[2].split("\\|")).stream().map(x -> Long.valueOf(x)).forEach(x -> {
-        Box box = boxes.stream().filter(y -> y.id == x).findFirst().get();
-        box.storageRoom = sr;
-        sr.boxes.add(box);
+        Box box = boxes.stream().filter(y -> y.getId() == x).findFirst().get();
+        box.setStorageRoom(sr);
+        sr.getBoxes().add(box);
       });
     });
 
@@ -136,7 +136,7 @@ public class Data {
       throw new RuntimeException(e);
     }
     try (FileWriter writer = new FileWriter("boxes.txt")) {
-      List<String> bLines = getBoxesLines(w.boxes);
+      List<String> bLines = getBoxesLines(w.getBoxes());
       for (String line : bLines) {
         writer.write(line + System.lineSeparator());
       }
@@ -146,11 +146,11 @@ public class Data {
   }
 
   private static List<String> getWarehouseLines(Warehouse w) {
-    return Arrays.asList(w.storageRooms.stream().map(sr -> {
-      String line = String.format("%d %d", sr.id, sr.owner.id);
+    return Arrays.asList(w.getStorageRooms().stream().map(sr -> {
+      String line = String.format("%d %d", sr.getId(), sr.getOwner().getId());
       StringBuilder boxIds = new StringBuilder();
-      sr.boxes.stream().forEach(b -> {
-        boxIds.append(b.id + " ");
+      sr.getBoxes().stream().forEach(b -> {
+        boxIds.append(b.getId() + " ");
       });
       return line + " " + boxIds.toString().trim().replace(' ', '|');
     }).toArray(String[]::new));
@@ -158,13 +158,13 @@ public class Data {
 
   private static List<String> getBoxesLines(List<Box> boxes) {
     return Arrays.asList(boxes.stream().map(box -> {
-      String line = String.format("%d %d %dx%d", box.id, box.owner.id, box.size.x, box.size.y);
+      String line = String.format("%d %d %dx%d", box.getId(), box.getOwner().getId(), box.getSize().getX(), box.getSize().getY());
       StringBuilder mats = new StringBuilder(), cats = new StringBuilder();
 
-      box.materials.stream().forEach(m -> {
+      box.getMaterials().stream().forEach(m -> {
         mats.append(m.name() + " ");
       });
-      box.categories.stream().forEach(c -> {
+      box.getCategories().stream().forEach(c -> {
         cats.append(c.name() + " ");
       });
 
@@ -180,8 +180,8 @@ public class Data {
 
   private static Size getSize(int x, int y) {
     Size size = new Size();
-    size.x = x;
-    size.y = y;
+    size.setX(x);
+    size.setY(y);
     return size;
   }
 }

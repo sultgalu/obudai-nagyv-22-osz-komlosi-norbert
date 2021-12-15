@@ -74,22 +74,22 @@ public class ConsoleView implements View {
 
   @Override
   public void printWarehouseStorageRooms(Warehouse warehouse) {
-    warehouse.storageRooms.stream().forEach(sr -> {
+    warehouse.getStorageRooms().stream().forEach(sr -> {
       printStorageRoom(sr);
     });
   }
 
   @Override
   public void printStorageRoomsRentByCustomer(Customer customer) {
-    customer.storageRooms.stream().forEach(sr -> {
+    customer.getStorageRooms().stream().forEach(sr -> {
       printStorageRoom(sr);
     });
   }
 
   @Override
   public void printCustomerBoxes(Customer customer) {
-    customer.storageRooms.stream().forEach(sr -> {
-      sr.boxes.stream().forEach(box -> {
+    customer.getStorageRooms().stream().forEach(sr -> {
+      sr.getBoxes().stream().forEach(box -> {
         printBox(box);
       });
     });
@@ -131,20 +131,20 @@ public class ConsoleView implements View {
   public Box readBox() {
     Box box = new Box();
     System.out.print("box Id: ");
-    box.id = Long.valueOf(getInput());
+    box.setId(Long.valueOf(getInput()));
     System.out.print("Size: ");
     String[] size = getInput().split("x");
-    box.size = new Size();
-    box.size.x = Integer.valueOf(size[0]);
-    box.size.y = Integer.valueOf(size[1]);
+    box.setSize(new Size());
+    box.getSize().setX(Integer.valueOf(size[0]));
+    box.getSize().setY(Integer.valueOf(size[1]));
 
     System.out.print("Content: ");
     String content = getInput();
-    box.materials = Arrays.asList(Material.valueOf(content));
+    box.setMaterials(Arrays.asList(Material.valueOf(content)));
 
     System.out.print("Categories: ");
     List<String> cats = Arrays.asList(getInput().replace(" ", "").split(","));
-    box.categories = Arrays.asList(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new));
+    box.setCategories(Arrays.asList(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new)));
     return box;
   }
 
@@ -185,20 +185,20 @@ public class ConsoleView implements View {
 
   private static void printStorageRoom(StorageRoom sr) {
     System.out.println("----------------------------");
-    System.out.println("StorageRoom Id: " + sr.id);
-    System.out.println("\tOwner: " + (sr.owner != null ? sr.owner.username : "nobody"));
-    System.out.println("\tSize: " + sr.size.x + "x" + sr.size.y);
-    System.out.println("\tBoxes: " + sr.boxes.size());
-    System.out.println(sr.isFree ? "Free" : "Not free");
+    System.out.println("StorageRoom Id: " + sr.getId());
+    System.out.println("\tOwner: " + (sr.getOwner() != null ? sr.getOwner().getUsername() : "nobody"));
+    System.out.println("\tSize: " + sr.getSize().getX() + "x" + sr.getSize().getY());
+    System.out.println("\tBoxes: " + sr.getBoxes().size());
+    System.out.println(sr.isFree() ? "Free" : "Not free");
     System.out.println("----------------------------");
   }
 
   private static void printBox(Box box) {
-    String mats = transformToList(box.materials.stream().map(Material::name).toArray());
-    String cats = transformToList(box.categories.stream().map(Category::name).toArray());
+    String mats = transformToList(box.getMaterials().stream().map(Material::name).toArray());
+    String cats = transformToList(box.getCategories().stream().map(Category::name).toArray());
     System.out.println("----------------------------");
-    System.out.println("\tId: " + box.id);
-    System.out.println("\tSize: " + box.size.x + "x" + box.size.y);
+    System.out.println("\tId: " + box.getId());
+    System.out.println("\tSize: " + box.getSize().getX() + "x" + box.getSize().getY());
     System.out.println("\tMaterials: " + mats);
     System.out.println("\tCategories: " + cats);
     System.out.println("----------------------------");

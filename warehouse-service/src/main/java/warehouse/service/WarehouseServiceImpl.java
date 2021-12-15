@@ -31,8 +31,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public boolean authenticate(String username, String password) {
-    for (Customer c : this.warehouse.customers) {
-      if ((c.username.equals(username)) && (c.password.equals(password))) {
+    for (Customer c : this.warehouse.getCustomers()) {
+      if ((c.getUsername().equals(username)) && (c.getPassword().equals(password))) {
         this.loggedIn = c;
         return true;
       }
@@ -62,7 +62,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public StorageRoom getStorageRoom(Long storageRoomId) {
-    return this.warehouse.storageRooms.stream().filter(sr -> sr.id == storageRoomId).findFirst().orElse(null);
+    return this.warehouse.getStorageRooms().stream().filter(sr -> sr.getId() == storageRoomId).findFirst().orElse(null);
   }
 
   @Override
@@ -71,10 +71,10 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.owner != this.loggedIn) {
-      sr.owner = this.loggedIn;
-      sr.isFree = false;
-      this.loggedIn.storageRooms.add(getStorageRoom(storageRoomId));
+    if (sr.getOwner() != this.loggedIn) {
+      sr.setOwner(this.loggedIn);
+      sr.setFree(false);
+      this.loggedIn.getStorageRooms().add(getStorageRoom(storageRoomId));
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
@@ -86,10 +86,10 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.owner == this.loggedIn) {
-      sr.owner = null;
-      sr.isFree = true;
-      this.loggedIn.storageRooms.removeIf(x -> x.id == storageRoomId);
+    if (sr.getOwner() == this.loggedIn) {
+      sr.setOwner(null);
+      sr.setFree(true);
+      this.loggedIn.getStorageRooms().removeIf(x -> x.getId() == storageRoomId);
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
@@ -101,11 +101,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.owner == this.loggedIn) {
-      box.storageRoom = sr;
-      box.owner = this.loggedIn;
-      sr.boxes.add(box);
-      this.warehouse.boxes.add(box);
+    if (sr.getOwner() == this.loggedIn) {
+      box.setStorageRoom(sr);
+      box.setOwner(this.loggedIn);
+      sr.getBoxes().add(box);
+      this.warehouse.getBoxes().add(box);
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
@@ -113,14 +113,14 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public void removeBox(Long boxId) throws PermissionException, InvalidParameterException {
-    Box box = this.warehouse.boxes.stream().filter(sr -> sr.id == boxId).findFirst().orElse(null);
+    Box box = this.warehouse.getBoxes().stream().filter(sr -> sr.getId() == boxId).findFirst().orElse(null);
     if (box == null) {
       throw new InvalidParameterException("Box with the given id does not exist");
     }
-    if (box.owner == this.loggedIn) {
-      this.warehouse.boxes.removeIf(b -> b.id == boxId);
-      this.warehouse.storageRooms.forEach(sr -> {
-        sr.boxes.removeIf(b -> b.id == boxId);
+    if (box.getOwner() == this.loggedIn) {
+      this.warehouse.getBoxes().removeIf(b -> b.getId() == boxId);
+      this.warehouse.getStorageRooms().forEach(sr -> {
+        sr.getBoxes().removeIf(b -> b.getId() == boxId);
       });
     } else {
       throw new PermissionException("You are not the owner of this box. You cannot remove it.");
