@@ -9,13 +9,16 @@ import warehouse.domain.Customer;
 import warehouse.domain.StorageRoom;
 import warehouse.domain.Warehouse;
 import warehouse.persistence.Data;
+import warehouse.persistence.repository.CustomerRepository;
 
+@ComponentScan(basePackages = { "warehouse.*" })
 @Component
-@ComponentScan(basePackages = { "warehouse.persistence" })
 public class WarehouseServiceImpl implements WarehouseService {
 
   @Autowired
   private Data data;
+  @Autowired
+  private CustomerRepository repo;
   private Warehouse warehouse;
   private Customer loggedIn;
 
@@ -26,6 +29,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public void initializeData() {
+    this.repo.save(new Customer());
     this.warehouse = this.data.load();
   }
 

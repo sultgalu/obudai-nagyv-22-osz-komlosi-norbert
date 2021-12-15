@@ -2,12 +2,32 @@ package warehouse.domain;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Box {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Embedded
   private Size size;
+  @ManyToOne
   private Customer owner;
+  @ManyToOne
   private StorageRoom storageRoom;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
   private List<Material> materials;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
   private List<Category> categories;
 
   public Long getId() {

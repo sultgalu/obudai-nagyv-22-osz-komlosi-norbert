@@ -2,11 +2,25 @@ package warehouse.domain;
 
 import java.util.List;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class StorageRoom {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private boolean isFree;
+  @Embedded
   private Size size;
+  @ManyToOne
   private Customer owner;
+  @OneToMany(mappedBy = "storageRoom")
   private List<Box> boxes;
 
   public Long getId() {
