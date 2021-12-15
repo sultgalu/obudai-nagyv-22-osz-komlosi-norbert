@@ -1,6 +1,6 @@
-package warehouse.domain;
+package warehouse.persistence.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
@@ -11,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Box {
@@ -23,12 +26,14 @@ public class Box {
   private Customer owner;
   @ManyToOne
   private StorageRoom storageRoom;
+  @LazyCollection(LazyCollectionOption.FALSE)
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  private List<Material> materials;
+  private Set<Material> materials;
+  @LazyCollection(LazyCollectionOption.FALSE)
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  private List<Category> categories;
+  private Set<Category> categories;
 
   public Long getId() {
     return this.id;
@@ -62,19 +67,19 @@ public class Box {
     this.storageRoom = storageRoom;
   }
 
-  public List<Material> getMaterials() {
+  public Set<Material> getMaterials() {
     return this.materials;
   }
 
-  public void setMaterials(List<Material> materials) {
+  public void setMaterials(Set<Material> materials) {
     this.materials = materials;
   }
 
-  public List<Category> getCategories() {
+  public Set<Category> getCategories() {
     return this.categories;
   }
 
-  public void setCategories(List<Category> categories) {
+  public void setCategories(Set<Category> categories) {
     this.categories = categories;
   }
 }

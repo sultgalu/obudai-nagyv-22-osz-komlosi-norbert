@@ -2,9 +2,9 @@ package warehouse.view;
 
 import org.springframework.stereotype.Component;
 
-import warehouse.domain.Box;
-import warehouse.domain.Customer;
-import warehouse.domain.Warehouse;
+import warehouse.persistence.entity.Box;
+import warehouse.persistence.entity.Customer;
+import warehouse.persistence.entity.StorageRoom;
 
 @Component
 public interface View {
@@ -22,9 +22,9 @@ public interface View {
 
   void printBoxesMenu();
 
-  void printWarehouseStorageRooms(Warehouse warehouse);
+  void printWarehouseStorageRooms(Iterable<StorageRoom> srs);
 
-  void printStorageRoomsRentByCustomer(Customer customer);
+  void printStorageRoomsRentByCustomer(Iterable<StorageRoom> srs);
 
   void printCustomerBoxes(Customer customer);
 

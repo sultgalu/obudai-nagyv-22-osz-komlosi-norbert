@@ -3,16 +3,16 @@ package warehouse.view;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import warehouse.domain.Box;
-import warehouse.domain.Category;
-import warehouse.domain.Customer;
-import warehouse.domain.Material;
-import warehouse.domain.Size;
-import warehouse.domain.StorageRoom;
-import warehouse.domain.Warehouse;
+import warehouse.persistence.entity.Box;
+import warehouse.persistence.entity.Category;
+import warehouse.persistence.entity.Customer;
+import warehouse.persistence.entity.Material;
+import warehouse.persistence.entity.Size;
+import warehouse.persistence.entity.StorageRoom;
 
 @Component
 public class ConsoleView implements View {
@@ -73,15 +73,15 @@ public class ConsoleView implements View {
   }
 
   @Override
-  public void printWarehouseStorageRooms(Warehouse warehouse) {
-    warehouse.getStorageRooms().stream().forEach(sr -> {
+  public void printWarehouseStorageRooms(Iterable<StorageRoom> srs) {
+    srs.forEach(sr -> {
       printStorageRoom(sr);
     });
   }
 
   @Override
-  public void printStorageRoomsRentByCustomer(Customer customer) {
-    customer.getStorageRooms().stream().forEach(sr -> {
+  public void printStorageRoomsRentByCustomer(Iterable<StorageRoom> srs) {
+    srs.forEach(sr -> {
       printStorageRoom(sr);
     });
   }
@@ -140,11 +140,11 @@ public class ConsoleView implements View {
 
     System.out.print("Content: ");
     String content = getInput();
-    box.setMaterials(Arrays.asList(Material.valueOf(content)));
+    box.setMaterials(Set.of(Material.valueOf(content)));
 
     System.out.print("Categories: ");
     List<String> cats = Arrays.asList(getInput().replace(" ", "").split(","));
-    box.setCategories(Arrays.asList(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new)));
+    box.setCategories(Set.of(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new)));
     return box;
   }
 

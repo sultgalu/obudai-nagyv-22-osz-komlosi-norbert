@@ -1,4 +1,4 @@
-package warehouse.domain;
+package warehouse.persistence.entity;
 
 public class Size {
   private int x;

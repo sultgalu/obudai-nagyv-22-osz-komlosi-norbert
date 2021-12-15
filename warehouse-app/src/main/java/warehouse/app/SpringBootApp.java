@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableTransactionManagement
 @EntityScan(basePackages = { "warehouse.*" }) // should be persistence.data
 @EnableJpaRepositories(basePackages = { "warehouse.persistence.repository" })
 @SpringBootApplication(scanBasePackages = {

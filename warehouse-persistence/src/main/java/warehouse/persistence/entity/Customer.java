@@ -1,8 +1,9 @@
-package warehouse.domain;
+package warehouse.persistence.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,8 +16,8 @@ public class Customer {
   private Long id;
   private String username;
   private String password;
-  @OneToMany(mappedBy = "owner")
-  private List<StorageRoom> storageRooms;
+  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+  private Set<StorageRoom> storageRooms;
 
   public Long getId() {
     return this.id;
@@ -42,11 +43,11 @@ public class Customer {
     this.password = password;
   }
 
-  public List<StorageRoom> getStorageRooms() {
+  public Set<StorageRoom> getStorageRooms() {
     return this.storageRooms;
   }
 
-  public void setStorageRooms(List<StorageRoom> storageRooms) {
+  public void setStorageRooms(Set<StorageRoom> storageRooms) {
     this.storageRooms = storageRooms;
   }
 }

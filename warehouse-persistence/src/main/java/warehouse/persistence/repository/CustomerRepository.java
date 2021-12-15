@@ -2,7 +2,7 @@ package warehouse.persistence.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import warehouse.domain.Customer;
+import warehouse.persistence.entity.Customer;
 
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 

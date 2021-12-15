@@ -1,43 +1,50 @@
 package warehouse.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import warehouse.domain.Box;
-import warehouse.domain.Customer;
-import warehouse.domain.StorageRoom;
-import warehouse.domain.Warehouse;
-import warehouse.persistence.Data;
+import warehouse.persistence.entity.Box;
+import warehouse.persistence.entity.Customer;
+import warehouse.persistence.entity.StorageRoom;
+import warehouse.persistence.repository.BoxRepository;
 import warehouse.persistence.repository.CustomerRepository;
+import warehouse.persistence.repository.StorageRoomRepository;
 
 @ComponentScan(basePackages = { "warehouse.*" })
 @Component
 public class WarehouseServiceImpl implements WarehouseService {
 
+  // @Autowired
+  // private Data data;
   @Autowired
-  private Data data;
+  private CustomerRepository customerRepo;
   @Autowired
-  private CustomerRepository repo;
-  private Warehouse warehouse;
-  private Customer loggedIn;
+  private BoxRepository boxRepo;
+  @Autowired
+  private StorageRoomRepository storageRepo;
+
+  // private Warehouse warehouse;
+  private long loggedInId = 0;
 
   @Override
   public void saveData() {
-    this.data.save(this.warehouse);
+    // this.data.save(this.warehouse);
   }
 
   @Override
   public void initializeData() {
-    this.repo.save(new Customer());
-    this.warehouse = this.data.load();
+    // this.warehouse = this.data.load();
   }
 
   @Override
   public boolean authenticate(String username, String password) {
-    for (Customer c : this.warehouse.getCustomers()) {
+    for (Customer c : this.customerRepo.findAll()) {
       if ((c.getUsername().equals(username)) && (c.getPassword().equals(password))) {
-        this.loggedIn = c;
+        this.loggedInId = c.getId();
         return true;
       }
     }
@@ -46,86 +53,96 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public boolean isLoggedIn() {
-    return this.loggedIn != null;
+    return this.loggedInId != 0;
   }
 
   @Override
   public Customer getLoggedInCustomer() {
-    return this.loggedIn;
+    return this.customerRepo.findById(this.loggedInId).orElse(null);
   }
 
   @Override
   public void logout() {
-    this.loggedIn = null;
+    this.loggedInId = 0;
   }
 
   @Override
-  public Warehouse getWarehouse() {
-    return this.warehouse;
+  public Iterable<StorageRoom> getStorageRooms() {
+    return (this.storageRepo.findAll());
   }
 
   @Override
   public StorageRoom getStorageRoom(Long storageRoomId) {
-    return this.warehouse.getStorageRooms().stream().filter(sr -> sr.getId() == storageRoomId).findFirst().orElse(null);
+    return this.storageRepo.findById(storageRoomId).orElse(null);
   }
 
+  @Override
+  @Transactional
+  public Iterable<StorageRoom> getMyStorageRooms() {
+    return new ArrayList<>(getLoggedInCustomer().getStorageRooms());
+  }
+
+  @Transactional
   @Override
   public void rentStorageRoom(Long storageRoomId) throws PermissionException, InvalidParameterException {
     StorageRoom sr = getStorageRoom(storageRoomId);
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.getOwner() != this.loggedIn) {
-      sr.setOwner(this.loggedIn);
+    if ((sr.getOwner() == null) || (sr.getOwner().getId() != this.loggedInId)) {
+      // sr.setOwner(this.customerRepo.findById(this.loggedInId).orElse(null));
       sr.setFree(false);
-      this.loggedIn.getStorageRooms().add(getStorageRoom(storageRoomId));
+      sr.setOwner(getLoggedInCustomer());
+      // getLoggedInCustomer().getStorageRooms().add(sr);
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
   }
 
   @Override
+  @Transactional
   public void cancelStorageRoomRending(Long storageRoomId) throws PermissionException, InvalidParameterException {
     StorageRoom sr = getStorageRoom(storageRoomId);
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.getOwner() == this.loggedIn) {
+    if ((sr.getOwner() != null) && (sr.getOwner().getId() == this.loggedInId)) {
       sr.setOwner(null);
       sr.setFree(true);
-      this.loggedIn.getStorageRooms().removeIf(x -> x.getId() == storageRoomId);
+      // this.customerRepo.findById(sr.getOwner().getId()).get().getStorageRooms().removeIf(null)
+      // sr.getOwner().getStorageRooms().removeIf(x -> x.getId() == sr.getId());
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
   }
 
   @Override
+  @Transactional
   public void storeBox(Box box, Long storageRoomId) throws PermissionException, InvalidParameterException {
     StorageRoom sr = getStorageRoom(storageRoomId);
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if (sr.getOwner() == this.loggedIn) {
+    if ((sr.getOwner() != null) && (sr.getOwner().getId() == this.loggedInId)) {
       box.setStorageRoom(sr);
-      box.setOwner(this.loggedIn);
+      box.setOwner(sr.getOwner());
       sr.getBoxes().add(box);
-      this.warehouse.getBoxes().add(box);
+      this.boxRepo.save(box);
+      // this.warehouse.getBoxes().add(box);
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
     }
   }
 
   @Override
+  @Transactional
   public void removeBox(Long boxId) throws PermissionException, InvalidParameterException {
-    Box box = this.warehouse.getBoxes().stream().filter(sr -> sr.getId() == boxId).findFirst().orElse(null);
+    Box box = this.boxRepo.findById(boxId).orElse(null);
     if (box == null) {
       throw new InvalidParameterException("Box with the given id does not exist");
     }
-    if (box.getOwner() == this.loggedIn) {
-      this.warehouse.getBoxes().removeIf(b -> b.getId() == boxId);
-      this.warehouse.getStorageRooms().forEach(sr -> {
-        sr.getBoxes().removeIf(b -> b.getId() == boxId);
-      });
+    if ((box.getOwner() != null) && (box.getOwner().getId() == this.loggedInId)) {
+      this.boxRepo.delete(box);
     } else {
       throw new PermissionException("You are not the owner of this box. You cannot remove it.");
     }

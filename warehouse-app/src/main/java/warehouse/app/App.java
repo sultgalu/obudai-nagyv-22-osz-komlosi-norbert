@@ -3,7 +3,7 @@ package warehouse.app;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import warehouse.domain.Box;
+import warehouse.persistence.entity.Box;
 import warehouse.service.WarehouseService;
 import warehouse.view.View;
 
@@ -111,7 +111,7 @@ public class App {
       try {
         switch (input) {
           case "1":
-            this.view.printWarehouseStorageRooms(this.service.getWarehouse());
+            this.view.printWarehouseStorageRooms(this.service.getStorageRooms());
             break;
           case "2":
             this.view.printRentStorageRoomPrompt();
@@ -124,7 +124,7 @@ public class App {
             this.service.cancelStorageRoomRending(Long.valueOf(input));
             break;
           case "4":
-            this.view.printStorageRoomsRentByCustomer(this.service.getLoggedInCustomer());
+            this.view.printStorageRoomsRentByCustomer(this.service.getMyStorageRooms());
             break;
           case "q":
             return;
@@ -134,6 +134,11 @@ public class App {
       } catch (Exception e) {
         this.view.printErrorMessage(e.getLocalizedMessage());
       }
+      // } catch (InvalidParameterException e) {
+      // this.view.printErrorMessage(e.getLocalizedMessage());
+      // } catch (PermissionException e) {
+      // this.view.printErrorMessage(e.getLocalizedMessage());
+      // }
     }
   }
 }

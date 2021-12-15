@@ -2,10 +2,9 @@ package warehouse.service;
 
 import org.springframework.stereotype.Component;
 
-import warehouse.domain.Box;
-import warehouse.domain.Customer;
-import warehouse.domain.StorageRoom;
-import warehouse.domain.Warehouse;
+import warehouse.persistence.entity.Box;
+import warehouse.persistence.entity.Customer;
+import warehouse.persistence.entity.StorageRoom;
 
 @Component
 public interface WarehouseService {
@@ -21,7 +20,9 @@ public interface WarehouseService {
 
   void logout();
 
-  Warehouse getWarehouse();
+  public Iterable<StorageRoom> getStorageRooms();
+
+  public Iterable<StorageRoom> getMyStorageRooms();
 
   StorageRoom getStorageRoom(Long storageRoomId);
 
