@@ -2,6 +2,7 @@ package warehouse.view;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import org.springframework.stereotype.Component;
 
@@ -23,19 +24,25 @@ public class ConsoleView implements View {
 
   @Override
   public String readUsername() {
-    System.console().printf("Enter username: ", "");
-    return System.console().readLine();
+    System.out.print("Enter username: ");
+    return getInput();
   }
 
   @Override
   public String readPassword() {
-    System.console().printf("Enter password: ", "");
-    return new String(System.console().readPassword());
+    System.out.print("Enter password: ");
+    if (System.console() != null) {
+      return new String(System.console().readPassword());
+    } else {
+      return getInput();
+    }
   }
 
   @Override
   public String getInput() {
-    return System.console().readLine();
+    Scanner scanner = new Scanner(System.in);
+    return scanner.next();
+    // return System.console().readLine();
   }
 
   @Override
@@ -124,19 +131,19 @@ public class ConsoleView implements View {
   public Box readBox() {
     Box box = new Box();
     System.out.print("box Id: ");
-    box.id = Long.valueOf(System.console().readLine());
+    box.id = Long.valueOf(getInput());
     System.out.print("Size: ");
-    String[] size = System.console().readLine().split("x");
+    String[] size = getInput().split("x");
     box.size = new Size();
     box.size.x = Integer.valueOf(size[0]);
     box.size.y = Integer.valueOf(size[1]);
 
     System.out.print("Content: ");
-    String content = System.console().readLine();
+    String content = getInput();
     box.materials = Arrays.asList(Material.valueOf(content));
 
     System.out.print("Categories: ");
-    List<String> cats = Arrays.asList(System.console().readLine().replace(" ", "").split(","));
+    List<String> cats = Arrays.asList(getInput().replace(" ", "").split(","));
     box.categories = Arrays.asList(cats.stream().map(x -> Category.valueOf(x)).toArray(Category[]::new));
     return box;
   }
@@ -155,7 +162,7 @@ public class ConsoleView implements View {
   public boolean getLogoutConformation() {
     while (true) {
       System.out.println("Are you sure? (Y/N)");
-      String input = System.console().readLine().toLowerCase();
+      String input = getInput().toLowerCase();
       if (input.equals("y")) {
         return true;
       }
