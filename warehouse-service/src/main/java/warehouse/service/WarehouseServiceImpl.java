@@ -18,8 +18,6 @@ import warehouse.persistence.repository.StorageRoomRepository;
 @Component
 public class WarehouseServiceImpl implements WarehouseService {
 
-  // @Autowired
-  // private Data data;
   @Autowired
   private CustomerRepository customerRepo;
   @Autowired
