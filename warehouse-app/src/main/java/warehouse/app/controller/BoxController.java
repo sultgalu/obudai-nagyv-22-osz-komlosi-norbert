@@ -1,5 +1,6 @@
 package warehouse.app.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import warehouse.app.transform.BoxTransformer;
+import warehouse.app.webdomain.BoxView;
 import warehouse.app.webdomain.NewBoxRequest;
 import warehouse.persistence.entity.Box;
 import warehouse.persistence.entity.Category;
 import warehouse.persistence.entity.Material;
-import warehouse.persistence.entity.Size;
-import warehouse.persistence.entity.StorageRoom;
 import warehouse.service.WarehouseService;
 
 @Controller
@@ -30,6 +31,8 @@ public class BoxController {
   private static final Logger LOGGER = LoggerFactory.getLogger(StorageRoomController.class);
   @Autowired
   private WarehouseService service;
+  @Autowired
+  private BoxTransformer boxTransformer;
 
   @ModelAttribute("materials")
   public List<Material> getMaterials() {
@@ -42,13 +45,21 @@ public class BoxController {
   }
 
   @ModelAttribute("boxes")
-  public Iterable<Box> getBoxes() {
-    return this.service.getMyBoxes();
+  public Iterable<BoxView> getBoxes() {
+    ArrayList<BoxView> result = new ArrayList<>();
+    this.service.getMyBoxes().forEach(x -> {
+      BoxView boxView = new BoxView();
+      this.boxTransformer.transform(boxView, x);
+      result.add(boxView);
+    });
+    return result;
   }
 
-  @ModelAttribute("mySrs")
-  public Iterable<StorageRoom> getMyStorageRooms() {
-    return this.service.getMyStorageRooms();
+  @ModelAttribute("mySrsId")
+  public Iterable<Long> getMyStorageRooms() {
+    ArrayList<Long> result = new ArrayList<>();
+    this.service.getMyStorageRooms().forEach(x -> result.add(x.getId()));
+    return result;
   }
 
   @GetMapping("/boxes")
@@ -81,14 +92,7 @@ public class BoxController {
     }
 
     Box box = new Box();
-    box.setCategories(request.getCategories());
-    box.setMaterials(request.getMaterials());
-
-    Size size = new Size();
-    String[] split = request.getSize().split("x");
-    size.setX(Integer.valueOf(split[0]));
-    size.setY(Integer.valueOf(split[1]));
-    box.setSize(size);
+    this.boxTransformer.transform(box, request);
 
     try {
       this.service.storeBox(box, request.getStorageRoomId());

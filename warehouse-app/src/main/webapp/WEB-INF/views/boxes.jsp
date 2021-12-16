@@ -21,8 +21,8 @@
     	<c:forEach items="${boxes}" var="box">
     	<tr>
     	<td>${box.id}</td>
-    	<td>${box.getStorageRoom() != null ? box.getStorageRoom().getId() : ""}</td>
-    	<td>${box.size.x * box.size.y} m2</td>
+    	<td>${box.storageRoomId}</td>
+    	<td>${box.size} m2</td>
     	<td>
    		<c:forEach items="${box.getMaterials()}" var="mat">
    			<span>${mat}</span>
@@ -45,7 +45,7 @@
     </tr>
     
     </table>
-    <c:if test="${not empty mySrs}">
+    <c:if test="${not empty mySrsId}">
     <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
     <tr>
     <th>New box</th>
@@ -56,7 +56,7 @@
     	<form:label path="storageRoomId">Storage room id</form:label>
     	
     	<form:select path="storageRoomId">
-			<form:options items="${mySrs}"/>
+			<form:options items="${mySrsId}"/>
 		</form:select><br/>
 		
     	<form:label path="size">Size</form:label> 
