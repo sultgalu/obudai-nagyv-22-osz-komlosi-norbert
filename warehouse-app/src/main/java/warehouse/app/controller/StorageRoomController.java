@@ -43,11 +43,12 @@ public class StorageRoomController {
   public String rent(StorageRoomRentRequest request) {
     try {
       this.service.rentStorageRoom(request.getId());
-      LOGGER.info("Storage room [{}] successfully rented", request.getId());
-    } catch (Exception e) {
-      LOGGER.error("Storage room [{}] renting failed with error \n {}", request.getId(), e.getLocalizedMessage());
-      throw new RuntimeException(e);
+    } catch (warehouse.service.PermissionException e) {
+      throw new PermissionException(e);
+    } catch (warehouse.service.InvalidParameterException e) {
+      throw new InvalidParameterException(e);
     }
+    LOGGER.info("Storage room [{}] successfully rented", request.getId());
     return "redirect:stg";
   }
 
@@ -55,12 +56,13 @@ public class StorageRoomController {
   public String cancelRent(@PathVariable long id) {
     try {
       this.service.cancelStorageRoomRending(id);
-      LOGGER.info("Storage room [{}] renting successfully cancelled", id);
-    } catch (Exception e) {
-      LOGGER.error("Storage room [{}] renting cancellation failed with error \n {}", id,
-        e.getLocalizedMessage());
-      throw new RuntimeException(e);
+    } catch (warehouse.service.PermissionException e) {
+      throw new PermissionException(e);
+    } catch (warehouse.service.InvalidParameterException e) {
+      throw new InvalidParameterException(e);
     }
+    LOGGER.info("Storage room [{}] renting successfully cancelled", id);
+
     return "redirect:/mystg";
   }
 

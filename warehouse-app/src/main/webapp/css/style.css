@@ -2,12 +2,11 @@
   --themeColor: #1e90af;
 }
 
-h1{
-	color:red;
-	text-align:center;
+.message{
+	color: blue;
 }
 
-.message{
+.error{
 	color: red;
 }
 

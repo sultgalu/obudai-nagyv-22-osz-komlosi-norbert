@@ -1,22 +1,16 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!DOCTYPE html>
-<html>
-    <head>
-    	<meta charset="UTF-8">
-    	<link rel="stylesheet" type="text/css" href="css/style.css">
-        <title>Sign in</title>
-    </head>
-    <body>
-    
-    <h2>Error page</h2>
-    <div class="message">
-    	<c:if test="${not empty errorCode}">
-    				${errorCode} : ${errorMessage}
+
+<jsp:include page="_header.jsp"/>
+
+    <div class="error">
+   		 <c:if test="${not empty errorCode}">
+   		 	<h1 style="font-size: xxlarge">HTTP ${errorCode}</h1>	
+   		 	<p style="font-size: medium">${errorMessage}</p>	
     	</c:if>
+    	
     	<c:if test="${empty errorCode}">
     				System error.
     	</c:if>
     </div>
-    </body>
-</html>
+<jsp:include page="_footer.jsp"/>

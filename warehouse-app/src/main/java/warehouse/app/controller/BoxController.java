@@ -36,22 +36,28 @@ public class BoxController {
     return Arrays.asList(Category.values());
   }
 
+  @ModelAttribute("boxes")
+  public Iterable<Box> getBoxes() {
+    return this.service.getMyBoxes();
+  }
+
   @GetMapping("/boxes")
   public String boxes(Model model) {
-    model.addAttribute("boxes", this.service.getMyBoxes());
     model.addAttribute("box", new NewBoxRequest());
     return "boxes";
   }
 
-  @GetMapping("/remove_box/{id}")
+  @PostMapping("/remove_box/{id}")
   public String removeBox(@PathVariable("id") long id) {
+
     try {
       this.service.removeBox(id);
-      LOGGER.info("Box [{}] succesfully removed", id);
-    } catch (Exception e) {
-      LOGGER.error("Box [{}] remove failed with error \n {}", id, e.getLocalizedMessage());
-      throw new RuntimeException(e);
+    } catch (warehouse.service.PermissionException e) {
+      throw new PermissionException(e);
+    } catch (warehouse.service.InvalidParameterException e) {
+      throw new InvalidParameterException(e);
     }
+    LOGGER.info("Box [{}] succesfully removed", id);
     return "redirect:/boxes";
   }
 
@@ -69,10 +75,12 @@ public class BoxController {
 
     try {
       this.service.storeBox(box, request.getStorageRoomId());
-      LOGGER.info("New box succesfully created");
-    } catch (Exception e) {
-      LOGGER.error("Error during new box: {}", e.getLocalizedMessage());
+    } catch (warehouse.service.PermissionException e) {
+      throw new PermissionException(e);
+    } catch (warehouse.service.InvalidParameterException e) {
+      throw new InvalidParameterException(e);
     }
+    LOGGER.info("New box succesfully created");
     return "redirect:boxes";
   }
 }

@@ -34,9 +34,9 @@
    		</c:forEach>
     	</td>
     	<td>
-    		<form action="/remove_box/${box.id}" method="get">
+    		<form:form action="/remove_box/${box.id}">
     			<input type="submit" value="Remove box">
-    		</form>
+    		</form:form>
     	</td>
     	</tr>
     	</c:forEach>
