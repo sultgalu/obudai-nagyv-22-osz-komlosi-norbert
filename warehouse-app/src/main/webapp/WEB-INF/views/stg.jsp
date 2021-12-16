@@ -4,7 +4,7 @@
 <jsp:include page="_header.jsp"/>
     <div class="content">
     <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
-    <tr>
+    <tr style="background-color: var(--themeColor)">
     	<th style="color: white">Storage rooms</th>
     </tr>
     <tr>
@@ -32,7 +32,7 @@
     </table>
     
     <table style="margin-left: auto; margin-right: auto; margin-top: 10px;">
-    <tr>
+    <tr style="background-color: var(--themeColor)">
     <th style="color: white">Storage room renting</th>
     </tr>
     <tr>

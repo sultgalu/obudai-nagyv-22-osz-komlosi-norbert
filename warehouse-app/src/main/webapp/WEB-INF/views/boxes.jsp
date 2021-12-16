@@ -5,7 +5,7 @@
     
     <div class="content">
     <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
-    <tr>
+    <tr style="background-color: var(--themeColor); color: white">
     <th>My boxes</th>
     </tr>
     <tr>
@@ -47,7 +47,7 @@
     </table>
     <c:if test="${not empty mySrsId}">
     <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
-    <tr>
+    <tr style="background-color: var(--themeColor); color: white;">
     <th>New box</th>
     </tr>
     <tr>

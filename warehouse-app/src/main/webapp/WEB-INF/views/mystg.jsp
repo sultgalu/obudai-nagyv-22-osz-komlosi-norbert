@@ -4,7 +4,7 @@
 <jsp:include page="_header.jsp"/>
 <div class="content">
 <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
-	<tr>
+	<tr style="background-color: var(--themeColor)">
     	<th style="color: white">My storage rooms</th>
 	</tr>
 	<tr>
