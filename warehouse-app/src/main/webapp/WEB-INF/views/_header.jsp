@@ -10,14 +10,17 @@
     </head>
     <body> 
     
-    <ul class="header">
+    <div class="header">
+    <ul>
+  <li><a href="/">WareHouse</a></li>
   <li><a href="stg">Storage Rooms</a></li>
   <li><a href="mystg">My Storage Rooms</a></li>
   <li><a href="boxes">Boxes</a></li>
-  <li>
-  <form:form action="/logout">
-  	<input type="submit" value="logout"/>
+  <li style="float:right">
+  <form:form align="center" action="/logout">
+  	<input class="button" type="submit" value="logout"/>
   </form:form>
-  User: <sec:authentication property="name"/>
-</li>
-</ul>
+  </li>
+  </ul>
+    </div>
+    

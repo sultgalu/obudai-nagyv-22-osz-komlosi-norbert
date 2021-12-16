@@ -1,3 +1,7 @@
+:root {
+  --themeColor: #1e90af;
+}
+
 h1{
 	color:red;
 	text-align:center;
@@ -7,6 +11,68 @@ h1{
 	color: red;
 }
 
+
+.header ul{
+	list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+.header li {
+  float: left;
+}
+.header li:last-child {
+  border-right: none;
+}
+.header li a{
+	display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+
+.header li a:hover:not(.active) {
+  background-color: #111;
+}
+
 .header{
-	color: blue;
+	font-family:  "Courier New", monospace;
+}
+.button{
+	background-color: var(--themeColor);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.content table{
+	list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+.content td, th {
+  float: left;
+}
+.content td:last-child {
+  border-right: none;
+}
+.content td{
+	display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.content{
+	font-family:  "Courier New", monospace;
 }

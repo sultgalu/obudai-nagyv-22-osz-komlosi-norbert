@@ -115,17 +115,17 @@ public class StorageRoomController {
     return "redirect:stg";
   }
 
-  @PostMapping("/cancel_rent")
-  public String cancelRent(StorageRoomRentRequest request) {
+  @PostMapping("/cancel_rent/{id}")
+  public String cancelRent(@PathVariable long id) {
     try {
-      this.service.cancelStorageRoomRending(request.getId());
-      LOGGER.info("Storage room [{}] renting successfully cancelled", request.getId());
+      this.service.cancelStorageRoomRending(id);
+      LOGGER.info("Storage room [{}] renting successfully cancelled", id);
     } catch (Exception e) {
-      LOGGER.error("Storage room [{}] renting cancellation failed with error \n {}", request.getId(),
+      LOGGER.error("Storage room [{}] renting cancellation failed with error \n {}", id,
         e.getLocalizedMessage());
       throw new RuntimeException(e);
     }
-    return "redirect:mystg";
+    return "redirect:/mystg";
   }
 
   @PostMapping("/login")

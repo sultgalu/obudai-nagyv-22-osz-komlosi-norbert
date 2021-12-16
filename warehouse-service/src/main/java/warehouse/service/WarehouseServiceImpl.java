@@ -31,9 +31,6 @@ public class WarehouseServiceImpl implements WarehouseService {
   @Autowired
   private PasswordEncoder encoder;
 
-  // private Warehouse warehouse;
-  private long loggedInId = 0;
-
   @Override
   public void saveData() {
     // this.data.save(this.warehouse);
@@ -55,7 +52,6 @@ public class WarehouseServiceImpl implements WarehouseService {
   public boolean authenticate(String username, String password) {
     for (Customer c : this.customerRepo.findAll()) {
       if ((c.getUsername().equals(username)) && (c.getPassword().equals(password))) {
-        this.loggedInId = c.getId();
         return true;
       }
     }
@@ -75,7 +71,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public void logout() {
-    this.loggedInId = 0;
+
   }
 
   @Override
@@ -112,7 +108,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if ((sr.getOwner() == null) || (sr.getOwner().getId() != this.loggedInId)) {
+    if ((sr.getOwner() == null) || (sr.getOwner().getId() != getLoggedInCustomer().getId())) {
       // sr.setOwner(this.customerRepo.findById(this.loggedInId).orElse(null));
       sr.setFree(false);
       sr.setOwner(getLoggedInCustomer());
@@ -130,7 +126,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if ((sr.getOwner() != null) && (sr.getOwner().getId() == this.loggedInId)) {
+    if ((sr.getOwner() != null) && (sr.getOwner().getId() == getLoggedInCustomer().getId())) {
       sr.setOwner(null);
       sr.setFree(true);
       sr.getBoxes().forEach(b -> b.setOwner(null));
@@ -148,7 +144,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (sr == null) {
       throw new InvalidParameterException("Storage room with the given id does not exist");
     }
-    if ((sr.getOwner() != null) && (sr.getOwner().getId() == this.loggedInId)) {
+    if ((sr.getOwner() != null) && (sr.getOwner().getId() == getLoggedInCustomer().getId())) {
       box.setStorageRoom(sr);
       box.setOwner(sr.getOwner());
       sr.getBoxes().add(box);
@@ -166,7 +162,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     if (box == null) {
       throw new InvalidParameterException("Box with the given id does not exist");
     }
-    if ((box.getOwner() != null) && (box.getOwner().getId() == this.loggedInId)) {
+    if ((box.getOwner() != null) && (box.getOwner().getId() == getLoggedInCustomer().getId())) {
       this.boxRepo.delete(box);
     } else {
       throw new PermissionException("You are not the owner of this box. You cannot remove it.");
