@@ -28,7 +28,8 @@ public interface WarehouseService {
 
   StorageRoom getStorageRoom(Long storageRoomId);
 
-  void rentStorageRoom(Long storageRoomId) throws PermissionException, InvalidParameterException;
+  void rentStorageRoom(Long storageRoomId)
+    throws PermissionException, InvalidParameterException, StorageRoomIsNotFreeException;
 
   void cancelStorageRoomRending(Long storageRoomId) throws PermissionException, InvalidParameterException;
 

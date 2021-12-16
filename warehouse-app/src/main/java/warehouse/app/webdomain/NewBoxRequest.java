@@ -2,11 +2,20 @@ package warehouse.app.webdomain;
 
 import java.util.Set;
 
+import warehouse.app.validation.CategoriesConstraint;
+import warehouse.app.validation.MaterialsConstraint;
+import warehouse.app.validation.SizeConstraint;
 import warehouse.persistence.entity.Category;
 import warehouse.persistence.entity.Material;
 
 public class NewBoxRequest {
   private long storageRoomId;
+  @SizeConstraint
+  private String size;
+  @MaterialsConstraint
+  private Set<Material> materials;
+  @CategoriesConstraint
+  private Set<Category> categories;
 
   public long getStorageRoomId() {
     return this.storageRoomId;
@@ -39,8 +48,4 @@ public class NewBoxRequest {
   public Set<Category> getCategories() {
     return this.categories;
   }
-
-  private String size;
-  private Set<Material> materials;
-  private Set<Category> categories;
 }

@@ -47,6 +47,8 @@ public class StorageRoomController {
       throw new PermissionException(e);
     } catch (warehouse.service.InvalidParameterException e) {
       throw new InvalidParameterException(e);
+    } catch (warehouse.service.StorageRoomIsNotFreeException e) {
+      throw new InvalidParameterException("Storage room " + request.getId() + " is already rented by someone.");
     }
     LOGGER.info("Storage room [{}] successfully rented", request.getId());
     return "redirect:stg";

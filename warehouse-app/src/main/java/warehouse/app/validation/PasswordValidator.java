@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class PasswordValidator implements ConstraintValidator<PasswordConstraint, String> {
 
-  private boolean containsNumber(String value) {
+  private static boolean containsNumber(String value) {
     return value.chars().anyMatch(c -> (c >= '0') && (c <= '9'));
   }
 

@@ -45,7 +45,7 @@
     </tr>
     
     </table>
-    
+    <c:if test="${not empty mySrs}">
     <table style="margin-left: auto; margin-right: auto; margin-top: 30px;">
     <tr>
     <th>New box</th>
@@ -54,7 +54,11 @@
     <td>
     	<form:form modelAttribute="box" action="/newbox">
     	<form:label path="storageRoomId">Storage room id</form:label>
-    	<form:input path="storageRoomId"/><br/>  
+    	
+    	<form:select path="storageRoomId">
+			<form:options items="${mySrs}"/>
+		</form:select><br/>
+		
     	<form:label path="size">Size</form:label> 
     	<form:input path="size" placeholder="1x1"/><br/>
 	   	 <form:label path="materials">Material</form:label>  
@@ -70,6 +74,8 @@
     </td>
     </tr>
     </table>
+    </c:if>
+    
     
     </div>
     
