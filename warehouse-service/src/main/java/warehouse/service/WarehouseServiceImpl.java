@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,8 @@ public class WarehouseServiceImpl implements WarehouseService {
   private BoxRepository boxRepo;
   @Autowired
   private StorageRoomRepository storageRepo;
+  @Autowired
+  private PasswordEncoder encoder;
 
   // private Warehouse warehouse;
   private long loggedInId = 0;
@@ -35,7 +40,14 @@ public class WarehouseServiceImpl implements WarehouseService {
   }
 
   @Override
+  @Transactional
   public void initializeData() {
+    this.customerRepo.findAll().forEach(u -> {
+      u.setPassword(this.encoder.encode(u.getPassword()));
+    });
+    this.customerRepo.findAll().forEach(u -> {
+      System.out.println("Pswd: " + u.getPassword());
+    });
     // this.warehouse = this.data.load();
   }
 
@@ -52,12 +64,13 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   @Override
   public boolean isLoggedIn() {
-    return this.loggedInId != 0;
+    return getLoggedInCustomer() != null;
   }
 
   @Override
   public Customer getLoggedInCustomer() {
-    return this.customerRepo.findById(this.loggedInId).orElse(null);
+    UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return this.customerRepo.findByUsername(principal.getUsername());
   }
 
   @Override
@@ -69,7 +82,7 @@ public class WarehouseServiceImpl implements WarehouseService {
   public Iterable<Box> getMyBoxes() {
     List<Box> result = new ArrayList<>();
     this.boxRepo.findAll().forEach(b -> {
-      if (b.getOwner().getId() == getLoggedInCustomer().getId()) {
+      if ((b.getOwner() != null) && (b.getOwner().getId() == getLoggedInCustomer().getId())) {
         result.add(b);
       }
     });
@@ -103,6 +116,7 @@ public class WarehouseServiceImpl implements WarehouseService {
       // sr.setOwner(this.customerRepo.findById(this.loggedInId).orElse(null));
       sr.setFree(false);
       sr.setOwner(getLoggedInCustomer());
+      sr.getBoxes().forEach(b -> b.setOwner(getLoggedInCustomer()));
       // getLoggedInCustomer().getStorageRooms().add(sr);
     } else {
       throw new PermissionException("You are not the owner of this storage room.");
@@ -119,6 +133,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     if ((sr.getOwner() != null) && (sr.getOwner().getId() == this.loggedInId)) {
       sr.setOwner(null);
       sr.setFree(true);
+      sr.getBoxes().forEach(b -> b.setOwner(null));
       // this.customerRepo.findById(sr.getOwner().getId()).get().getStorageRooms().removeIf(null)
       // sr.getOwner().getStorageRooms().removeIf(x -> x.getId() == sr.getId());
     } else {

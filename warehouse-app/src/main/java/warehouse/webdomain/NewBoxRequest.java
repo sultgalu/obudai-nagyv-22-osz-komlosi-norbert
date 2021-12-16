@@ -6,7 +6,7 @@ import warehouse.persistence.entity.Category;
 import warehouse.persistence.entity.Material;
 
 public class NewBoxRequest {
-  private final long storageRoomId;
+  private long storageRoomId;
 
   public long getStorageRoomId() {
     return this.storageRoomId;
@@ -20,11 +20,19 @@ public class NewBoxRequest {
     return this.materials;
   }
 
-  public NewBoxRequest(long storageRoomId, String size, Set<Material> materials, Set<Category> categories) {
-    super();
+  public void setStorageRoomId(long storageRoomId) {
     this.storageRoomId = storageRoomId;
+  }
+
+  public void setSize(String size) {
     this.size = size;
+  }
+
+  public void setMaterials(Set<Material> materials) {
     this.materials = materials;
+  }
+
+  public void setCategories(Set<Category> categories) {
     this.categories = categories;
   }
 
@@ -32,7 +40,7 @@ public class NewBoxRequest {
     return this.categories;
   }
 
-  private final String size;
-  private final Set<Material> materials;
-  private final Set<Category> categories;
+  private String size;
+  private Set<Material> materials;
+  private Set<Category> categories;
 }

@@ -1,18 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-    <head>
-    	<meta charset="UTF-8">
-    	<link rel="stylesheet" type="text/css" href="css/style.css">
-        <title>View Books</title>
-    </head>
-    <body>
-    
-    <ul>
-  <li><a href="stg">Storage Rooms</a></li>
-  <li><a href="mystg">My Storage Rooms</a></li>
-  <li><a href="boxes">Boxes</a></li>
-</ul>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<jsp:include page="_header.jsp"/>
     
     <h2>My boxes</h2>
     
@@ -29,23 +18,40 @@
     	<td>${box.id}</td>
     	<td>${box.getStorageRoom() != null ? box.getStorageRoom().getId() : ""}</td>
     	<td>${box.size.x * box.size.y} m2</td>
-    	<td></td>
-    	<td></td>
     	<td>
-    		<form action="/removebox" method="post">
+   		<c:forEach items="${box.getMaterials()}" var="mat">
+   			<span>${mat}</span>
+   		</c:forEach>
+    	</td>
+    	<td>
+    	<c:forEach items="${box.getCategories()}" var="cat">
+   			<span>${cat}</span>
+   		</c:forEach>
+    	</td>
+    	<td>
+    		<form action="/remove_box/${box.id}" method="get">
     			<input type="submit" value="Remove box">
     		</form>
     	</td>
     </tr>
     </c:forEach>
     </table>
-     <form action="/newbox" method="post">
-    	<label>Storage room id</label>
-    	<input type="number" id="storageRoomId" name="storageRoomId"><br/>
-    	<label>Size</label>
-    	<input type="text" id="size" name="size" placeholder="1x1"><br/>
-    	<input type="submit" value="Save">
-    </form>
+    
+    <form:form modelAttribute="box" action="/newbox">
+    <form:label path="storageRoomId">Storage room id</form:label>
+    <form:input path="storageRoomId"/><br/>  
+    <form:label path="size">Size</form:label> 
+    <form:input path="size" placeholder="1x1"/><br/>
+    <form:label path="materials">Material</form:label>  
+	<form:select path="materials">
+		<form:options items="${materials}"/>
+	</form:select><br/>
+    <form:label path="categories">Categories</form:label>  
+	<form:select path="categories">
+		<form:options items="${categories}"/>
+	</form:select><br/>
+	<input type="submit" value="Save">
+    </form:form>
     
     </body>
 </html>

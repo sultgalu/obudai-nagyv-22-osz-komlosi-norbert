@@ -1,17 +1,26 @@
 package warehouse.webdomain;
 
-public class LoginRequest {
-  private final String username;
-  private final String password;
+import javax.validation.constraints.NotEmpty;
 
-  public LoginRequest(String username, String password) {
-    super();
-    this.username = username;
-    this.password = password;
-  }
+import warehouse.app.validation.PasswordConstraint;
+
+public class LoginRequest {
+
+  @NotEmpty(message = "Please enter a username")
+  private String username;
+  @PasswordConstraint
+  private String password;
 
   public String getUsername() {
     return this.username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getPassword() {

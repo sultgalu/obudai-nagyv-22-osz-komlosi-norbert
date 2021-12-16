@@ -1,19 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-    <head>
-    	<meta charset="UTF-8">
-    	<link rel="stylesheet" type="text/css" href="css/style.css">
-        <title>View Books</title>
-    </head>
-    <body>
-    
-    <ul>
-  <li><a href="stg">Storage Rooms</a></li>
-  <li><a href="mystg">My Storage Rooms</a></li>
-  <li><a href="boxes">Boxes</a></li>
-</ul>
-    
+
+<jsp:include page="_header.jsp"/>
     <h2>Storage rooms</h2>
     
     <table>
