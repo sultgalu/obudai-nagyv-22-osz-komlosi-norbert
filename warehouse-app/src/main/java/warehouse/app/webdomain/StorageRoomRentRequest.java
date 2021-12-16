@@ -1,4 +1,4 @@
-package warehouse.webdomain;
+package warehouse.app.webdomain;
 
 public class StorageRoomRentRequest {
   private long id;

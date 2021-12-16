@@ -1,4 +1,4 @@
-package warehouse.webdomain;
+package warehouse.app.webdomain;
 
 import javax.validation.constraints.NotEmpty;
 

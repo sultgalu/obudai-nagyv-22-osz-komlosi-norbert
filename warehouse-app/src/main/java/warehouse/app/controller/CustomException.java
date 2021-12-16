@@ -1,4 +1,4 @@
-package warehouse.controller;
+package warehouse.app.controller;
 
 public class CustomException extends RuntimeException {
 

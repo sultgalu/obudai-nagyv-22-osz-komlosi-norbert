@@ -1,4 +1,4 @@
-package warehouse.controller;
+package warehouse.app.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import warehouse.app.webdomain.LoginRequest;
+import warehouse.app.webdomain.NewBoxRequest;
+import warehouse.app.webdomain.StorageRoomRentRequest;
 import warehouse.persistence.entity.Box;
 import warehouse.persistence.entity.Category;
 import warehouse.persistence.entity.Material;
 import warehouse.persistence.entity.Size;
 import warehouse.service.WarehouseService;
-import warehouse.webdomain.LoginRequest;
-import warehouse.webdomain.NewBoxRequest;
-import warehouse.webdomain.StorageRoomRentRequest;
 
 @Controller
 public class StorageRoomController {
