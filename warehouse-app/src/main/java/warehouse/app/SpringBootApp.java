@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
-@EntityScan(basePackages = { "warehouse.*" }) // should be persistence.data
+@EntityScan(basePackages = { "warehouse.persistence.entity" })
 @EnableJpaRepositories(basePackages = { "warehouse.persistence.repository" })
 @SpringBootApplication(scanBasePackages = {
   "warehouse.*" })

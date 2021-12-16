@@ -27,7 +27,7 @@ public class SessionController {
     RedirectAttributes rAttrs) {
 
     LOGGER.info("ASDDDDD");
-    if (bindingResult.hasErrors()) {
+    if (!bindingResult.hasErrors()) {
       rAttrs.addFlashAttribute("message", "FAILED");
       throw new CustomException("ASDASD");
       // return "redirect:login";

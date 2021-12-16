@@ -7,19 +7,17 @@ import warehouse.app.validation.PasswordConstraint;
 public class LoginRequest {
 
   @NotEmpty(message = "Please enter a username")
-  private String username;
+  private final String username;
   @PasswordConstraint
-  private String password;
+  private final String password;
 
   public String getUsername() {
     return this.username;
   }
 
-  public void setUsername(String username) {
+  public LoginRequest(@NotEmpty(message = "Please enter a username") String username, String password) {
+    super();
     this.username = username;
-  }
-
-  public void setPassword(String password) {
     this.password = password;
   }
 

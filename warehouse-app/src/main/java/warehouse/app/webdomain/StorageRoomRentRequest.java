@@ -1,13 +1,14 @@
 package warehouse.app.webdomain;
 
 public class StorageRoomRentRequest {
-  private long id;
+  private final long id;
 
   public long getId() {
     return this.id;
   }
 
-  public void setId(long id) {
+  public StorageRoomRentRequest(long id) {
     this.id = id;
   }
+
 }
