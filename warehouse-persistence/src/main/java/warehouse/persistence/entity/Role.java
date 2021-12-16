@@ -1,4 +1,4 @@
-package warehouse.app.security;
+package warehouse.persistence.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 

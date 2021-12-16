@@ -1,6 +1,6 @@
-INSERT INTO customer (id, username, password) VALUES (1, 'nemenek', '1234');
-INSERT INTO customer (id, username, password) VALUES (2, 'sultgalu', '1234');
-INSERT INTO customer (id, username, password) VALUES (3, 'dzsi7', '1234');
+INSERT INTO customer (id, username, password, role) VALUES (1, 'nemenek', '1234', 'ROLE_CUSTOMER');
+INSERT INTO customer (id, username, password, role) VALUES (2, 'sultgalu', '1234', 'ROLE_CUSTOMER');
+INSERT INTO customer (id, username, password, role) VALUES (3, 'dzsi7', '1234', 'ROLE_CUSTOMER');
 
 INSERT INTO STORAGE_ROOM (id, owner_id, is_free, x, y) VALUES (1, 1, false, 100, 100);
 INSERT INTO STORAGE_ROOM (id, owner_id, is_free, x, y) VALUES (2, 3, false, 300, 400);

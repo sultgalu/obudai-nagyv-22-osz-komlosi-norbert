@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <jsp:include page="_header.jsp"/>
     <div class="content">
@@ -36,11 +37,11 @@
     </tr>
     <tr>
     <td>
-		<form action="/rent" method="post">
+		<form:form action="/rent">
     	<label>The id of the room you want to rent:</label>
-    	<input type="number" id="id" name="id">
-    	<input type="submit" value="Rent">
-    </form>
+    	<input type="number" id="id" name="id"/>
+    	<input type="submit" value="Rent"/>
+    </form:form>
 	</td>
     </tr>
     </table >

@@ -3,6 +3,8 @@ package warehouse.persistence.entity;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,8 @@ public class Customer {
   private String password;
   @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private Set<StorageRoom> storageRooms;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
   public Long getId() {
     return this.id;
@@ -49,5 +53,13 @@ public class Customer {
 
   public void setStorageRooms(Set<StorageRoom> storageRooms) {
     this.storageRooms = storageRooms;
+  }
+
+  public Role getRole() {
+    return this.role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 }

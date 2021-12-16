@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <jsp:include page="_header.jsp"/>
 <div class="content">
@@ -24,9 +25,9 @@
     			<td>${sr.isFree() ? "yes" : "no"}</td>
     			<td>${sr.boxes.size()}</td>
     			<td>
- 					<form action="/cancel_rent/${sr.id}" method="post">
+ 					<form:form action="/cancel_rent/${sr.id}">
     					<input type="submit" value="Cancel renting">
-    				</form>
+    				</form:form>
 				</td>
     		</tr>
     	</c:forEach>

@@ -20,7 +20,7 @@ public class CustomerPrincipal implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Arrays.asList(Role.ROLE_CUSTOMER);
+    return Arrays.asList(this.customer.getRole());
   }
 
   @Override
