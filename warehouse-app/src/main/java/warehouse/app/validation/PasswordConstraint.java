@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordConstraint {
 
-  String message() default "Password is not valid";
+  String message() default "Password constraints are not satisfied";
 
   Class<?>[] groups() default {};
 
